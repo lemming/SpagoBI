@@ -1705,7 +1705,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 			, xtype : 'combo'
 			, tpl: new Ext.XTemplate(
 				'<div class="x-combo-list-inner"><tpl for=".">',
-					'<div title="{label}"role="option" class="x-combo-list-item">{label}</div>',
+					'<div title="{[Ext.util.Format.htmlEncode(values.label)]}" role="option" class="x-combo-list-item">{label}</div>',
 				'</tpl></div>'
 			)
 			, listeners: {
