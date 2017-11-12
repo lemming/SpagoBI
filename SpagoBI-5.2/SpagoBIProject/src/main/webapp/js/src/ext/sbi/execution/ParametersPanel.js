@@ -1654,9 +1654,9 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 	, createComboField: function( baseConfig, executionInstance ) { 
 		
 		var p = baseConfig.parameter;
-		
+
 		if(!p.colspan) p.colspan = 1;
-		var comboWidth = (baseConfig.isDateRange && this.isNorth()?100:200) * p.colspan;
+		var comboWidth = (baseConfig.isDateRange && this.isNorth()?100:300) * p.colspan;
 		baseConfig.width  = comboWidth;
 		
 		var store = this.createCompleteStore(p, executionInstance, 'simple');
@@ -1687,8 +1687,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 				}
 			}, this);
 		}
-		
-		
+
 		var field = new Ext.ux.Andrie.Select(Ext.apply(baseConfig, {
 			multiSelect: p.multivalue
 			//, minLength:2
@@ -1704,6 +1703,11 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 			, selectOnFocus:true
 			, autoLoad: false
 			, xtype : 'combo'
+			, tpl: new Ext.XTemplate(
+				'<div class="x-combo-list-inner"><tpl for=".">',
+					'<div title="{label}"role="option" class="x-combo-list-item">{label}</div>',
+				'</tpl></div>'
+			)
 			, listeners: {
 			    'select': {
 			       	fn: function(){	}
@@ -1711,7 +1715,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 			    }			    
 			}
 		}));
-		
+
 		return field;
 	}
 

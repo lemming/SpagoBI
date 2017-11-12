@@ -108,7 +108,7 @@ Sbi.settings.execution = {
 		, parametersPanel: {
 			columnNo: 3
 			, mandatoryFieldAdditionalString: '*' // a String that will be added in the label of the mandatory fields
-			, columnWidth: 310
+			, columnWidth: 410
 			, labelAlign: 'left'
 			, fieldWidth: 180	
 			, maskOnRender: false
