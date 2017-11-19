@@ -649,6 +649,7 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 		}, this);
 		
 		this.parametersPanel.on('executionbuttonclicked', this.parametersExecutionButtonHandler, this);
+		this.parametersPanel.on('exportbuttonclicked', this.parametersExportButtonHandler, this);
 		
 		return this.parametersPanel;
 	}
@@ -683,6 +684,10 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 		else {
 			this.refreshDocument();
 		}
+	}
+
+	, parametersExportButtonHandler : function () {
+		this.refreshDocument(null, 'XLSX');
 	}
 	
 	/**
@@ -800,8 +805,30 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 		
 		this.documentVisualizationModality = 'VIEW';
 		this.synchronizeToolbar( this.executionInstance, this.documentVisualizationModality );
-		
-		this.documentPanel.getLayout().setActiveItem( 1 );
+
+		var typeCode = this.executionInstance.document.typeCode;
+
+		if (typeCode === 'REPORT') {
+			var outputType = null;
+			if(this.executionInstance.PARAMETERS){
+				try {
+					var parameters =  JSON.parse(this.executionInstance.PARAMETERS); // Produces a SyntaxError
+					if(parameters.outputType){
+						outputType = parameters.outputType;
+						if(outputType != null){
+							outputType = outputType.toUpperCase();
+						}
+					}
+				} catch (error) {}
+			}
+
+			if (!outputType) { // direct export - no need to replace current document
+				this.documentPanel.getLayout().setActiveItem( 1 );
+			}
+		} else {
+			this.documentPanel.getLayout().setActiveItem( 1 );
+		}
+
 		Sbi.trace('[DocumentExecutionPage.showDocument]: OUT');
 	}
 	
@@ -1023,10 +1050,15 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 	 * 
 	 * @method
 	 */
-	, refreshDocument: function(executionInstance) {
+	, refreshDocument: function(executionInstance, outputType) {
 		Sbi.trace('[DocumentExecutionPage.refreshDocument]: IN');
 		
 		var formState = this.parametersPanel.getFormState();
+
+		if (outputType) {
+			formState.outputType = outputType;
+		}
+
 		if((this.fireEvent('beforeexecution', this, this.executionInstance, formState) !== false)
 				&& (this.parametersPanel.fireEvent('ready', this) !== false)){
 			this.doExecuteDocumunt(executionInstance, formState);

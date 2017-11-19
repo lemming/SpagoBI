@@ -137,6 +137,15 @@ Sbi.execution.ParametersPanel = function(config, doc) {
 	
 	this.initTootlbar();
 	this.initExecutionButton();
+	this.initExportButton();
+	
+	var buttons = this.isMassiveExportContext() ? {html: "&nbsp;"} : [
+		this.executionButton
+	];
+	
+	if (doc && doc.typeCode === 'REPORT' && buttons.length) {
+		buttons.push(this.exportButton);
+	}
 	
 	c = Ext.apply({}, c, {
 		labelAlign: c.labelAlign,
@@ -146,12 +155,13 @@ Sbi.execution.ParametersPanel = function(config, doc) {
         autoHeight: true,
         items: [{
         		// panel with execution button
-	        	items: this.isMassiveExportContext() ? {html: "&nbsp;"} : this.executionButton  // do not display execution button on massive export context
-	        	, width: 70
+	        	items: buttons  // do not display execution button on massive export context
+	        	// , width: 70
 	            , border: false
 	            , style: c.parametersRegion == 'north' 
 	            	? 'padding:' + c.fieldsPadding + 'px 0px 0px ' + c.fieldsPadding + 'px;'
 	            	: 'margin-left: auto; margin-right: auto; padding: 10px 0px 10px 0px;'
+				, bodyStyle: 'display: flex; align-content: space-between; justify-content: space-evenly;'
 	        }, {
 	        	// separator panel
 	        	html: '&nbsp;'
@@ -322,6 +332,19 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 	
     , executionButtonHandler : function() {
     	this.fireEvent('executionbuttonclicked', this);
+	}
+	
+	, initExportButton: function () {
+		this.exportButton = new Ext.Button({
+	        text: LN('sbi.execution.parametersselection.exportbutton.message')
+	        , tooltip: LN('sbi.execution.parametersselection.exportbutton.tooltip')
+	        , handler: this.exportButtonHandler
+	        , scope: this
+		});
+	}
+
+	, exportButtonHandler : function() {
+    	this.fireEvent('exportbuttonclicked', this);
 	}
 	
 	, initViewpointsPanel: function(config, doc){
