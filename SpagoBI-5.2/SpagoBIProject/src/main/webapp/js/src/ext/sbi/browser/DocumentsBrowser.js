@@ -294,6 +294,7 @@ Ext.extend(Sbi.browser.DocumentsBrowser, Ext.Panel, {
 		executionPanel.addListener('crossnavigationonothertab', this.onCrossNavigation, this);
 		executionPanel.addListener('openfavourite', this.onOpenFavourite, this);
 		executionPanel.addListener('closeDocument', this.closeDocument,this);
+		executionPanel.addListener('executedocumentinnewtab', this.onDocumentClick, this);
 		
 		this.addPanelToSheet(executionPanel);
 		executionPanel.execute();
