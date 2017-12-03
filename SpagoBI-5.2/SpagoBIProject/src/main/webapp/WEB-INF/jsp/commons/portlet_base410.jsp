@@ -259,6 +259,8 @@ commented by Davide Zerbetto on 12/10/2009: there are problems with MIF (Ext Man
 <link id="extall"     rel="styleSheet" href ="${pageContext.request.contextPath}/js/lib/ext-4.1.1a/resources/css/ext-all.css" type="text/css" />
 <link id="theme-gray" rel="styleSheet" href ="${pageContext.request.contextPath}/js/lib/ext-4.1.1a/resources/css/ext-all-gray.css" type="text/css" />
 
+<script type="text/javascript" src="<%=urlBuilder.getResourceLink(request, "js/lib/ext-4.1.1a/locale/ext-lang-" + (locale != null ? locale.getLanguage() : GeneralUtilities.getDefaultLocale().getLanguage()) + ".js")%>"></script>
+
 <script type="text/javascript">
 	Ext.BLANK_IMAGE_URL = '<%=urlBuilder.getResourceLink(request, "/js/lib/ext-2.0.1/resources/images/default/s.gif")%>';
 	Ext.LEAF_IMAGE_URL = '<%=urlBuilder.getResourceLink(request, "/js/lib/ext-4.1.1a/resources/themes/images/default/tree/leaf.gif")%>';
