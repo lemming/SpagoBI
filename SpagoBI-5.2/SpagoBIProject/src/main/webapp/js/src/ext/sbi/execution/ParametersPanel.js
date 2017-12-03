@@ -1685,6 +1685,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 					var r = new store.recordType(emptyData, emptyId); // create new record
 					store.insert(0, r);
 				}
+
 			}, this);
 		}
 		
@@ -1692,13 +1693,14 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 		var field = new Ext.ux.Andrie.Select(Ext.apply(baseConfig, {
 			multiSelect: p.multivalue
 			//, minLength:2
-			, editable  : false			    
-			, forceSelection : false
+			, editable  : true			    
+			, forceSelection : true
 			, store :  store
 			, displayField:'label'
 			, valueField:'value'
 			, emptyText: ''
 			, typeAhead: false
+			, mode: 'local'
 			//, typeAheadDelay: 1000
 			, triggerAction: 'all'
 			, selectOnFocus:true
@@ -1860,7 +1862,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 	}
 	
 	, createCompleteStore: function(p, executionInstance, mode) {
-		var store = this.createStore();
+		var store = this.createStore({ autoLoad: true });
 		Sbi.trace('[ParametersPanel.createCompleteStore] : executionInstance [' + executionInstance + ']');
 		store.baseParams  = this.getBaseParams(p, executionInstance, mode);
 		store.on('beforeload', function(store, o) {
@@ -1894,12 +1896,12 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 		// store.baseParams  = this.getBaseParams(p, this.executionInstance);
 	}
 	
-	, createStore: function() {
+	, createStore: function(config) {
 		var store;
 		
-		store = new Ext.data.JsonStore({
+		store = new Ext.data.JsonStore(Ext.apply(config || {}, {
 			url: this.services['getParameterValueForExecutionService']
-		});
+		}));
 		
 		store.on('loadexception', function(store, options, response, e) {
 			var f = this.fields[options.params.PARAMETER_ID];
