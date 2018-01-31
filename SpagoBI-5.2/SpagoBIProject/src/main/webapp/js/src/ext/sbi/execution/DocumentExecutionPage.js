@@ -68,6 +68,7 @@ Sbi.execution.DocumentExecutionPage = function(config, doc) {
 		, 'openfavourite'
 		, 'loadurlfailure'
 		, 'closeDocument'
+		, 'executedocumentinnewtab'
 	);	
 	
 	this.initServices();
@@ -649,6 +650,7 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 		}, this);
 		
 		this.parametersPanel.on('executionbuttonclicked', this.parametersExecutionButtonHandler, this);
+		this.parametersPanel.on('executioninnewtabbuttonclicked', this.parametersExecutionInNewTabButtonHandler, this);
 		
 		return this.parametersPanel;
 	}
@@ -683,6 +685,11 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 		else {
 			this.refreshDocument();
 		}
+	}
+
+	, parametersExecutionInNewTabButtonHandler : function () {
+		var data = Ext.apply({}, { parametersPanelFormState: this.parametersPanel.getFormState() }, this.executionInstance.document);
+		this.fireEvent('executedocumentinnewtab', data);
 	}
 	
 	/**

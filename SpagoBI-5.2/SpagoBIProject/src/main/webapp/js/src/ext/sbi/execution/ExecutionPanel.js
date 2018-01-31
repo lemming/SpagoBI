@@ -52,6 +52,10 @@ Sbi.execution.ExecutionPanel = function(config, doc) {
 	
 	this.activeDocument.documentExecutionPage.on('closeDocument',  function(config){		
 		this.closeDocument(config);
+	} , this);
+
+	this.activeDocument.documentExecutionPage.on('executeDocumentInNewTab',  function(config){		
+		this.executeDocumentInNewTab(config);
 	} , this);	
 	
 	var c = Ext.apply({}, config || {}, {
@@ -80,7 +84,10 @@ Sbi.execution.ExecutionPanel = function(config, doc) {
 	    }, this);
     }
     
-    this.addEvents('closeDocument');
+	this.addEvents(
+		'closeDocument'
+		, 'executedocumentinnewtab'
+	);
 };
 
 /**
@@ -160,6 +167,10 @@ Ext.extend(Sbi.execution.ExecutionPanel, Ext.Panel, {
 			//DocBrowser env: close tab
 			this.fireEvent('closeDocument');
 		}
+	}
+
+	,executeDocumentInNewTab: function(doc){
+		this.fireEvent('executedocumentinnewtab', this, doc);
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------

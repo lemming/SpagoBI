@@ -137,6 +137,15 @@ Sbi.execution.ParametersPanel = function(config, doc) {
 	
 	this.initTootlbar();
 	this.initExecutionButton();
+	this.initExecutionInNewTabButton();
+
+	var buttons = this.isMassiveExportContext() ? {html: "&nbsp;"} : [
+		this.executionButton
+	];
+	
+	if (doc && doc.typeCode === 'REPORT' && buttons.length) {
+		buttons.push(this.executionInNewTabButton);
+	}
 	
 	c = Ext.apply({}, c, {
 		labelAlign: c.labelAlign,
@@ -146,12 +155,12 @@ Sbi.execution.ParametersPanel = function(config, doc) {
         autoHeight: true,
         items: [{
         		// panel with execution button
-	        	items: this.isMassiveExportContext() ? {html: "&nbsp;"} : this.executionButton  // do not display execution button on massive export context
-	        	, width: 70
+	        	items: buttons  // do not display execution button on massive export context
 	            , border: false
 	            , style: c.parametersRegion == 'north' 
 	            	? 'padding:' + c.fieldsPadding + 'px 0px 0px ' + c.fieldsPadding + 'px;'
-	            	: 'margin-left: auto; margin-right: auto; padding: 10px 0px 10px 0px;'
+					: 'margin-left: auto; margin-right: auto; padding: 10px 0px 10px 0px;'
+				, bodyStyle: 'display: flex; align-content: space-between; justify-content: space-evenly;'
 	        }, {
 	        	// separator panel
 	        	html: '&nbsp;'
@@ -319,9 +328,22 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 	        , scope: this
 		});
 	}
+
+	, initExecutionInNewTabButton: function () {
+    	this.executionInNewTabButton = new Ext.Button({
+	        text: LN('sbi.execution.parametersselection.executioninnewtabbutton.message')
+	        , tooltip: LN('sbi.execution.parametersselection.executioninnewtabbutton.tooltip')
+	        , handler: this.executionInNewTabButtonHandler
+	        , scope: this
+		});
+	}
 	
     , executionButtonHandler : function() {
     	this.fireEvent('executionbuttonclicked', this);
+	}
+
+    , executionInNewTabButtonHandler : function() {
+    	this.fireEvent('executioninnewtabbuttonclicked', this);
 	}
 	
 	, initViewpointsPanel: function(config, doc){
@@ -811,7 +833,12 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 		
 		this.initializeFieldDependencies();
 		
-		var defaultValuesFormState = this.getDefaultValuesFormState();
+		var defaultValuesFormState;
+		if (this.executionInstance.document.parametersPanelFormState) {
+			defaultValuesFormState = this.executionInstance.document.parametersPanelFormState;
+		} else {
+			defaultValuesFormState = this.getDefaultValuesFormState();
+		}
 		Sbi.debug('[ParametersPanel.initializeParametersPanel] : default values form state is [' +  Sbi.toSource(defaultValuesFormState) + ']');
 		var state = Ext.apply({}, defaultValuesFormState);
 		for(p in this.preferenceState) {
