@@ -138,13 +138,15 @@ Sbi.execution.ParametersPanel = function(config, doc) {
 	this.initTootlbar();
 	this.initExecutionButton();
 	this.initExecutionInNewTabButton();
-
+	this.initExportButton();
+	
 	var buttons = this.isMassiveExportContext() ? {html: "&nbsp;"} : [
 		this.executionButton
 	];
 	
 	if (doc && doc.typeCode === 'REPORT' && buttons.length) {
 		buttons.push(this.executionInNewTabButton);
+		buttons.push(this.exportButton);
 	}
 	
 	c = Ext.apply({}, c, {
@@ -344,6 +346,19 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 
     , executionInNewTabButtonHandler : function() {
     	this.fireEvent('executioninnewtabbuttonclicked', this);
+	}
+	
+	, initExportButton: function () {
+		this.exportButton = new Ext.Button({
+	        text: LN('sbi.execution.parametersselection.exportbutton.message')
+	        , tooltip: LN('sbi.execution.parametersselection.exportbutton.tooltip')
+	        , handler: this.exportButtonHandler
+	        , scope: this
+		});
+	}
+
+	, exportButtonHandler : function() {
+    	this.fireEvent('exportbuttonclicked', this);
 	}
 	
 	, initViewpointsPanel: function(config, doc){
