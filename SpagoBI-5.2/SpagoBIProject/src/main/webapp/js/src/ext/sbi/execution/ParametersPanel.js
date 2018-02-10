@@ -1743,6 +1743,7 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 			, emptyText: ''
 			, typeAhead: false
 			, mode: 'local'
+			, anyMatch: true
 			//, typeAheadDelay: 1000
 			, triggerAction: 'all'
 			, selectOnFocus:true
@@ -1752,7 +1753,14 @@ Ext.extend(Sbi.execution.ParametersPanel, Ext.FormPanel, {
 			    'select': {
 			       	fn: function(){	}
 			       	, scope: this
-			    }			    
+				}
+				, beforequery: function(q) {
+					if(!q.query) return;
+
+					var length = q.query.length;
+					q.query = new RegExp(Ext.escapeRe(q.query), 'i');
+					q.query.length = length;
+				}
 			}
 		}));
 		
