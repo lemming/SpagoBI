@@ -689,6 +689,11 @@ Ext.extend(Sbi.execution.DocumentExecutionPage, Ext.Panel, {
 	}
 
 	, parametersExecutionInNewTabButtonHandler : function () {
+		if(!this.parametersPanel.isReadyForExecution()) {
+			return Sbi.exception.ExceptionHandler.showErrorMessage(
+				LN('sbi.execution.parametersselection.executioninnewtabbutton.error')
+			);
+		}
 		var data = Ext.apply({}, { parametersPanelFormState: this.parametersPanel.getFormState() }, this.executionInstance.document);
 		this.fireEvent('executedocumentinnewtab', data);
 	}
